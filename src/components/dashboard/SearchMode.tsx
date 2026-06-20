@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, ArrowRight, AlertCircle } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -19,6 +19,14 @@ export function SearchMode({ namespace, namespaces }: { namespace: string; names
   const [searched, setSearched] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Clear stale results when the namespace changes — they belonged to the
+  // previous agent.
+  useEffect(() => {
+    setResults([]);
+    setSearched(false);
+    setError(null);
+  }, [namespace]);
 
   const handleSearch = async () => {
     if (!query.trim()) return;

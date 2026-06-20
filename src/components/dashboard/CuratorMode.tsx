@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Bot, Play, AlertTriangle, CheckCircle, Lightbulb, AlertCircle, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -35,6 +35,17 @@ export function CuratorMode({ namespace }: { namespace: string }) {
   const [gapText, setGapText] = useState("");
   const [savingGap, setSavingGap] = useState(false);
   const [addedGaps, setAddedGaps] = useState<number[]>([]);
+
+  // Reset the report when the namespace changes — otherwise the previous agent's
+  // curation results stay on screen after switching agents.
+  useEffect(() => {
+    setStatus("idle");
+    setReport(null);
+    setError(null);
+    setOpenGap(null);
+    setGapText("");
+    setAddedGaps([]);
+  }, [namespace]);
 
   const handleRun = async () => {
     setStatus("running");
