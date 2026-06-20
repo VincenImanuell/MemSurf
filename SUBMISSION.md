@@ -34,7 +34,10 @@ Copy-paste fields for the Overflow 2026 submission form.
 > checks a checklist for gaps — correcting forward, never deleting (Walrus is immutable).
 > **Route (Agent)** — A second autonomous agent finds the memories from one agent that
 > are relevant to another (semantic match) and routes them across — every decision logged
-> as its own memory. Demonstrated by a working multi-agent handoff pipeline
+> as its own memory, anchored on Sui, and **notified to the target via Sui Stack Messaging**
+> (recorded on Walrus). The target can **reject** a proposed memory with a reason — a
+> single-round negotiation where the rejection becomes the target's own counter-memory.
+> Demonstrated by a working multi-agent handoff pipeline
 > (research-agent → Router → trading-bot) where the bot acts on routed knowledge with no
 > re-prompting, every step auditable on Walrus.
 > **Artifacts** — Upload datasets/logs/reports directly to Walrus via the public publisher.

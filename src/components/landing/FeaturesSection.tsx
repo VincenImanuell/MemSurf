@@ -53,11 +53,11 @@ const agents = [
     icon: Share2,
     tag: "Router Agent",
     title: "Shares what matters.",
-    desc: "Finds the memories from one agent that are relevant to another — by semantic match, gap-aware — routes them across, and anchors every decision on Sui. No re-prompting.",
+    desc: "Finds the memories from one agent that are relevant to another — by semantic match, gap-aware — routes them across, anchors every decision on Sui, and messages the target. The target can even reject a memory with a reason. No re-prompting.",
     specs: [
       { label: "Match", value: "semantic" },
-      { label: "Gap-aware", value: "novel only" },
       { label: "Anchor", value: "on-chain" },
+      { label: "Notify", value: "messaging" },
     ],
   },
 ];

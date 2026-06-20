@@ -90,7 +90,7 @@ It turns Walrus memory from a write-only black box into something **observable, 
 | **Add Memory** | Write a decision/fact straight to Walrus | `rememberAndWait` |
 | **Capture** | Paste notes → MemWal's server-side LLM extracts facts → each stored as a memory | `analyze` |
 | **Curator Agent** 🤖 | Autonomous memory hygiene: near-duplicates (cosine distance), vague entries (heuristic), gaps (category checklist) — flags + fills, never deletes | `recall` + `remember` |
-| **Router Agent** 🔀 | Autonomously copies the memories from one agent that are *relevant* to another (semantic match to interests), gap-aware — and **anchors each routing decision on Sui** | `recall` + `rememberBulk` + Sui |
+| **Router Agent** 🔀 | Autonomously copies the memories from one agent that are *relevant* to another (semantic match to interests), gap-aware. **Anchors each decision on Sui**, **notifies the target via Sui Stack Messaging** (recorded on Walrus), and supports **reject-with-reason** — the target can decline a memory, logged as its own counter-memory | `recall` + `rememberBulk` + Sui + messaging |
 | **Transfer** | One-click copy a memory across agents | `remember` |
 | **Verify on Walrus** 🛡️ | Re-fetches the blob from the public Walrus aggregator → proves it exists, is Seal-encrypted, content-addressed | Walrus aggregator (direct) |
 | **Artifacts** 📦 | Upload files directly to Walrus via the public publisher | Walrus publisher (direct) |
@@ -137,6 +137,9 @@ public publisher/aggregator. The delegate key is used server-side and never ship
   (adds corrective memory). Memory is immutable on Walrus, so it *corrects forward*, never deletes.
 - **Router Agent** — given a target agent's interests, recalls the *relevant* memories from a source
   agent and copies them across, logging each routing decision as its own memory in `memory-router`.
+  Each handoff also **notifies the target** (Sui Stack Messaging-style notification, filed on Walrus
+  in `inbox:<target>`), and the target can **reject** a proposed memory with a reason — a single-round
+  negotiation where the rejection is stored as the target's own counter-memory rather than silently dropped.
 - **Closed autonomous loop** (`scripts/agents-demo.mjs`) — a complete agentic workflow:
   `research-agent` records a finding → Router routes it (and **anchors the routing on Sui**) →
   `trading-bot` reads it, acts, and measures a result → Router routes that result **back** to

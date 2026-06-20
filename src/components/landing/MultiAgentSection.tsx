@@ -30,7 +30,7 @@ function AgentCard({
 
 export function MultiAgentSection() {
   return (
-    <section className="relative bg-navy text-white py-28 px-6 overflow-hidden">
+    <section id="agents" className="relative bg-navy text-white py-28 px-6 overflow-hidden">
       <SubtleBubbles count={28} />
       <div className="max-w-5xl mx-auto relative z-10">
         <motion.div
@@ -131,9 +131,9 @@ export function MultiAgentSection() {
           transition={{ duration: 0.6, delay: 0.4 }}
           className="text-center text-white/40 text-sm mt-12 flex items-center justify-center gap-2 flex-wrap"
         >
-          Every routing decision is logged as memory on Walrus and anchored on Sui
+          Every routing decision is logged on Walrus, anchored on Sui, and messaged to the target
           <ArrowRight className="w-3.5 h-3.5" />
-          fully auditable on-chain, no agent acts on something it can&apos;t trace.
+          which can even reject a memory with a reason — fully auditable, no agent acts on something it can&apos;t trace.
         </motion.p>
 
         <motion.p

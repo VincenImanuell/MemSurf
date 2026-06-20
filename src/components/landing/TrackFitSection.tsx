@@ -70,7 +70,7 @@ const asks = [
 
 export function TrackFitSection() {
   return (
-    <section className="relative bg-[linear-gradient(to_bottom,#0C4A6E_0%,#E0F2FE_13%,#BAE6FD_50%,#E0F2FE_87%,#0C4A6E_100%)] py-28 px-6 overflow-hidden">
+    <section className="relative bg-[linear-gradient(to_bottom,#0C4A6E_0%,#0E5A86_7%,#BAE6FD_22%,#E0F2FE_40%,#E0F2FE_60%,#BAE6FD_78%,#0E5A86_93%,#0C4A6E_100%)] py-28 px-6 overflow-hidden">
       {/* iOS-style soft glowy blobs floating in the cool light-blue panel */}
       <div className="absolute -top-16 left-[6%] w-72 h-72 rounded-full bg-white/40 blur-3xl pointer-events-none" />
       <div className="absolute top-1/4 right-[4%] w-96 h-96 rounded-full bg-white/35 blur-3xl pointer-events-none" />
