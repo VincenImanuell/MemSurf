@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Share2, ArrowRight, Play, AlertCircle, CheckCircle, Loader2, Check, Radio, Pencil, Anchor } from "lucide-react";
+import { Share2, ArrowRight, Play, AlertCircle, CheckCircle, Loader2, Check, Radio, Pencil, Anchor, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const LIVE_INTERVAL_MS = 60_000; // poll once a minute — well within the rate limit
@@ -24,9 +24,15 @@ interface AnchorRef {
   digest: string;
   suiscan: string;
 }
+interface MessagingRef {
+  channel: string;
+  delivered: boolean;
+  onChain: { digest: string; suiscan: string } | null;
+}
 interface ApplyResult {
   routed: number;
   anchor: AnchorRef | null;
+  messaging?: MessagingRef | null;
 }
 
 // Mirror of the server's default interest profiles, for prefill UX.
@@ -53,6 +59,7 @@ export function RouterMode({ namespace, namespaces }: { namespace: string; names
   const [error, setError] = useState<string | null>(null);
   const [routedCount, setRoutedCount] = useState<number | null>(null);
   const [anchorTx, setAnchorTx] = useState<AnchorRef | null>(null);
+  const [messaging, setMessaging] = useState<MessagingRef | null>(null);
   const [showInterests, setShowInterests] = useState(false);
 
   // Editable agent name (cosmetic — the storage namespace stays "memory-router").
@@ -144,6 +151,7 @@ export function RouterMode({ namespace, namespaces }: { namespace: string; names
     setCandidates(null);
     setRoutedCount(null);
     setAnchorTx(null);
+    setMessaging(null);
     try {
       const data = await callMemWal<RouteResult>("route", {
         sourceNamespace: source,
@@ -175,6 +183,7 @@ export function RouterMode({ namespace, namespaces }: { namespace: string; names
       });
       setRoutedCount(res.routed);
       setAnchorTx(res.anchor ?? null);
+      setMessaging(res.messaging ?? null);
       setCandidates(null);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Routing failed.");
@@ -390,6 +399,23 @@ export function RouterMode({ namespace, namespaces }: { namespace: string; names
             <CheckCircle className="w-4 h-4" />
             Routed {routedCount} memor{routedCount === 1 ? "y" : "ies"} into {target}. Switch the namespace to {target} to see them.
           </div>
+          {messaging?.delivered && (
+            <div className="flex items-center gap-1.5 text-xs text-ocean font-medium dark:text-sky-300">
+              <Mail className="w-3.5 h-3.5" />
+              {messaging.onChain ? (
+                <a
+                  href={messaging.onChain.suiscan}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-ocean-deep"
+                >
+                  Notified {target} via Sui Stack Messaging · {messaging.onChain.digest.slice(0, 10)}…
+                </a>
+              ) : (
+                <span>Notified {target} via Sui Stack Messaging (filed on Walrus · {messaging.channel})</span>
+              )}
+            </div>
+          )}
           {anchorTx && (
             <a
               href={anchorTx.suiscan}

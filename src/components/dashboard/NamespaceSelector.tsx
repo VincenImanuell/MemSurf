@@ -20,6 +20,7 @@ export function NamespaceSelector({ namespace, namespaces, onSelect }: Props) {
     <div className="relative" ref={ref}>
       <button
         onClick={() => setOpen(!open)}
+        title="Example agent — a stand-in for your own. MemSurf manages the memory; it isn't the agent."
         className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-ocean/20 text-navy text-sm font-medium hover:border-ocean/50 transition-colors dark:bg-white/5 dark:border-white/10 dark:text-white dark:hover:border-sky-300/40"
       >
         <Layers className="w-4 h-4 text-ocean" />
@@ -28,7 +29,10 @@ export function NamespaceSelector({ namespace, namespaces, onSelect }: Props) {
       </button>
 
       {open && (
-        <div className="absolute top-full mt-2 left-0 bg-white border border-ocean/10 rounded-xl shadow-lg shadow-navy/10 py-1 min-w-[180px] z-50 dark:bg-slate-900 dark:border-white/10 dark:shadow-sky-950/30">
+        <div className="absolute top-full mt-2 left-0 bg-white border border-ocean/10 rounded-xl shadow-lg shadow-navy/10 py-1 min-w-[200px] z-50 dark:bg-slate-900 dark:border-white/10 dark:shadow-sky-950/30">
+          <p className="px-4 py-1.5 text-[10px] leading-snug text-navy/45 dark:text-white/40">
+            Example agents — stand-ins for your own.
+          </p>
           {namespaces.map((ns) => (
             <button
               key={ns}

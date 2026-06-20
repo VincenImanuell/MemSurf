@@ -53,8 +53,20 @@ export default function DashboardPage() {
 
   if (session === undefined) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-seafoam">
-        <div className="w-6 h-6 border-2 border-ocean/30 border-t-ocean rounded-full animate-spin" />
+      <div className="flex min-h-screen flex-col items-center justify-center gap-6 bg-seafoam">
+        <div className="relative flex h-20 w-20 items-center justify-center">
+          {/* soft pulse + spinning ring around the brand mark */}
+          <span className="absolute h-20 w-20 rounded-full bg-ocean/10 animate-ping" />
+          <span className="absolute h-20 w-20 rounded-full border-2 border-ocean/15 border-t-ocean animate-spin" />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo.png" alt="MemSurf" className="h-11 w-11 rounded-xl object-contain" />
+        </div>
+        <div className="text-center">
+          <p className="font-serif text-lg text-navy">MemSurf</p>
+          <p className="mt-1 text-xs font-mono uppercase tracking-[0.2em] text-ocean/60">
+            Loading your memory layer…
+          </p>
+        </div>
       </div>
     );
   }

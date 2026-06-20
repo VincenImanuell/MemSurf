@@ -40,6 +40,25 @@ No account, no setup. Everything below runs against **real Walrus testnet data**
 
 ---
 
+## Positioning — read this first
+
+**MemSurf is not an agent. It's the layer that manages agent memory** on Walrus —
+inspect, verify, curate, route.
+
+- The **autonomous, long-running agents** in this submission are MemSurf's own
+  **Curator Agent** (continuously scans memory for duplicates/gaps and corrects
+  forward) and **Router Agent** (watches agents and routes relevant knowledge
+  between them, anchoring + messaging each decision).
+- `coding-agent` / `research-agent` / `trading-bot` are **example client
+  namespaces** — stand-ins for *your* agents. They demonstrate what MemSurf
+  manages; they are **not** the deliverable. Point MemSurf at your own agent's
+  namespace and it works exactly the same.
+
+So: the deliverable is the **horizontal memory-management layer**, not any one
+vertical agent.
+
+---
+
 ## The problem
 
 AI agents store memory, but that memory is a **black box**. A developer who gives an agent
@@ -138,6 +157,11 @@ public publisher/aggregator. The delegate key is used server-side and never ship
   [`memsurf::routing`](move/DEPLOYMENT.md) (`0xf13a3c58…`), with a shared `RoutingRegistry` —
   every time the Router moves memory between agents it **anchors the decision on-chain**
   (`anchor_routing`, emitting a tamper-evident `RoutingAnchored` event).
+- **Framework adapter** — `MemWalChatMemory`
+  ([`src/adapters/memwal-langchain.ts`](src/adapters/memwal-langchain.ts)) exposes Walrus memory
+  through a LangChain-style interface (`loadMemoryVariables` / `saveContext`), so an agent built on
+  an existing framework can use MemWal as its memory layer **outside** the MemSurf UI. Runnable
+  example: [`examples/langchain-adapter/`](examples/langchain-adapter/).
 
 ## Why it fits the Walrus track
 
@@ -190,7 +214,7 @@ Honest about what's *not* built yet — future work, not claimed:
 - **Cryptographic provenance** (per-memory signing + browser re-verification)
 - **Direct Seal access policies** (own Move policy for shared, permissioned memory)
 - **Cross-user** memory sharing (scoped delegate keys)
-- **Real-time** sync + framework adapters (LangChain / Mastra / agent-framework hooks)
+- **Real-time** sync + more framework adapters (Mastra / agent-framework hooks — LangChain-style adapter already shipped, see above)
 - **Multi-agent negotiation** (beyond one-way routing)
 
 ## Tech stack

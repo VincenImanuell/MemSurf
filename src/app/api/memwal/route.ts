@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createMemWalClient } from "@/lib/memwal";
 import { anchorRouting, digestOf } from "@/lib/sui-anchor";
+import { routeMessageBody, sendRouteMessageOnChain, type MessagingResult } from "@/lib/sui-messaging";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -458,6 +459,17 @@ export async function POST(req: Request) {
           items.map((i) => `· "${i.text.slice(0, 50)}${i.text.length > 50 ? "…" : ""}" (relevance to "${i.matchedInterest ?? "n/a"}")`).join(" ");
         await memwal.remember(summary, "memory-router");
 
+        // Messaging leg: notify the target agent that new knowledge arrived.
+        // The notification is recorded as a verifiable memory on Walrus in the
+        // target's `inbox:<target>` namespace (always, demoable), and — if a Sui
+        // Stack Messaging signer is configured — also sent on-chain (best-effort,
+        // no-op otherwise). This makes the handoff a real message, not a silent copy.
+        const channel = `inbox:${target}`;
+        const messageBody = routeMessageBody({ source, target, count: items.length, summary });
+        await memwal.remember(messageBody, channel);
+        const onChain = await sendRouteMessageOnChain({ source, target, count: items.length, summary });
+        const messaging: MessagingResult = { channel, delivered: true, onChain };
+
         // Best-effort: anchor this routing decision on Sui (no-op until the
         // MemSurf Move contract + signer env are configured).
         const anchor = await anchorRouting({
@@ -467,7 +479,7 @@ export async function POST(req: Request) {
           digestHex: digestOf(items.map((i) => i.text)),
         });
 
-        return NextResponse.json({ routed: items.length, target, source, anchor });
+        return NextResponse.json({ routed: items.length, target, source, anchor, messaging });
       }
 
       default:

@@ -10,6 +10,12 @@ Copy-paste fields for the Overflow 2026 submission form.
 **Tagline (one line)**
 > The command center for AI agent memory on Walrus — inspect, verify, curate, and route it.
 
+**Positioning (read first)**
+> MemSurf is the **memory-management layer**, not an agent. The autonomous, long-running
+> agents here are MemSurf's own **Curator** and **Router**. `coding-agent` / `research-agent` /
+> `trading-bot` are **example client namespaces** standing in for your own agents — they show
+> what MemSurf manages, they are not the deliverable.
+
 **Short description**
 > MemSurf is a developer tool + agentic layer on top of MemWal that makes Walrus
 > agent-memory observable, verifiable, and shareable. Inspect what your agents
@@ -48,6 +54,7 @@ Copy-paste fields for the Overflow 2026 submission form.
 **Links**
 - Live demo / Website: https://memsurf.vercel.app
 - GitHub (public): https://github.com/VincenImanuell/MemSurf
+- Walrus Sites page: _<run `site-builder publish` in `walrus-site/` and paste the `*.walrus.site` URL>_
 - Demo video: _<YouTube link — add after recording>_
 
 **Deployment**

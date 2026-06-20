@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MemSurf — agent memory on Walrus</title>
+  <meta name="description" content="MemSurf — the command center for AI agent memory on Walrus. Inspect, verify, curate, and route it." />
+  <style>
+    :root {
+      --navy: #0C4A6E; --ocean: #0EA5E9; --ocean-deep: #0369A1;
+      --foam: #E0F2FE; --ocean-light: #BAE6FD; --ink: #0b2436;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      color: var(--ink);
+      background: linear-gradient(160deg, var(--foam) 0%, var(--ocean-light) 55%, var(--foam) 100%);
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      padding: 32px;
+    }
+    .card {
+      max-width: 720px; width: 100%;
+      background: rgba(255,255,255,0.55); backdrop-filter: blur(14px);
+      border: 1px solid rgba(255,255,255,0.7); border-radius: 28px;
+      box-shadow: 0 24px 60px -24px rgba(3,105,161,0.35);
+      padding: 48px 44px;
+    }
+    .badge {
+      display: inline-block; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--ocean-deep); background: rgba(14,165,233,0.12);
+      border: 1px solid rgba(14,165,233,0.25); padding: 6px 14px; border-radius: 999px; margin-bottom: 22px;
+    }
+    h1 { font-family: Georgia, "Times New Roman", serif; font-size: 52px; line-height: 1.02; color: var(--navy); letter-spacing: -0.02em; }
+    .tag { margin-top: 14px; font-size: 18px; color: #355; font-weight: 300; line-height: 1.5; }
+    .pos { margin-top: 20px; font-size: 14px; color: #466; line-height: 1.6; border-left: 3px solid var(--ocean); padding-left: 14px; }
+    .links { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 12px; }
+    a.btn {
+      text-decoration: none; font-size: 14px; font-weight: 600; padding: 12px 20px; border-radius: 14px;
+      transition: transform .12s ease, box-shadow .12s ease;
+    }
+    a.primary { background: var(--ocean); color: #fff; box-shadow: 0 10px 24px -10px rgba(14,165,233,0.7); }
+    a.ghost { background: rgba(255,255,255,0.6); color: var(--navy); border: 1px solid rgba(12,74,110,0.18); }
+    a.btn:hover { transform: translateY(-1px); }
+    .stack { margin-top: 28px; font-size: 12px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: #577; letter-spacing: 0.04em; }
+    .foot { margin-top: 24px; font-size: 11px; color: #6a8; }
+    .foot code { background: rgba(12,74,110,0.07); padding: 2px 6px; border-radius: 6px; word-break: break-all; }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <span class="badge">Sui Overflow 2026 · Walrus Track</span>
+    <h1>MemSurf</h1>
+    <p class="tag">The command center for your AI agents' memory on Walrus — inspect it, verify it, curate it, and route it between agents.</p>
+    <p class="pos">MemSurf is the <strong>memory-management layer</strong>, not an agent. Its Curator and Router are the autonomous agents; <code>coding-agent</code> / <code>research-agent</code> / <code>trading-bot</code> are example namespaces standing in for your own.</p>
+
+    <div class="links">
+      <a class="btn primary" href="https://memsurf.vercel.app">Open the live demo →</a>
+      <a class="btn ghost" href="https://github.com/VincenImanuell/MemSurf">GitHub repo</a>
+      <a class="btn ghost" href="https://testnet.suivision.xyz/object/0x361840ea5bd9b39b77e8240cdbd74a5e561c9a338c20bcc1e59488143fde45aa">MemWalAccount on Sui</a>
+      <a class="btn ghost" href="https://docs.wal.app/walrus-memory/getting-started/what-is-memwal">What is MemWal?</a>
+    </div>
+
+    <p class="stack">MemWal · Walrus (aggregator + publisher) · Seal · Sui testnet</p>
+    <p class="foot">This page is served from <strong>Walrus Sites</strong> — static, decentralized, on Walrus testnet. The full app runs at <code>memsurf.vercel.app</code>.</p>
+  </main>
+</body>
+</html>
