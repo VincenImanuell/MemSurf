@@ -20,7 +20,9 @@ export default function Home() {
           <Hero />
           <ProblemSection />
         </div>
-        <div className="relative z-0 -mt-20">
+        {/* z-40 keeps the Features section above the fixed rising-bubble layer
+            (z-30) so those bubbles don't show over it — its own sway bubbles stay. */}
+        <div className="relative z-40 -mt-20">
           <FeaturesSection />
         </div>
         <MultiAgentSection />

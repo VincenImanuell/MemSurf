@@ -8,6 +8,7 @@ import { ArrowRight, Eye, EyeOff, ExternalLink, AlertCircle } from "lucide-react
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Logo } from "@/components/Logo";
+import { LaunchGate } from "@/components/LaunchGate";
 import { saveSession } from "@/lib/session";
 
 export default function ConnectPage() {
@@ -63,6 +64,7 @@ export default function ConnectPage() {
   };
 
   return (
+    <LaunchGate>
     <div className="relative min-h-screen bg-gradient-to-br from-ocean-light via-wave to-ocean-deep flex items-center justify-center px-4 overflow-hidden">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
@@ -209,5 +211,6 @@ export default function ConnectPage() {
         </div>
       </motion.div>
     </div>
+    </LaunchGate>
   );
 }

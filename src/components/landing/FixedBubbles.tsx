@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 // page scrolls — they don't "rise with" the content. Transform/opacity only
 // (GPU-composited) + pointer-events-none, so it never adds scroll jank.
 // Fades in only after the hero is scrolled past (the hero keeps its own look).
-export function FixedBubbles({ count = 50 }: { count?: number }) {
+export function FixedBubbles({ count = 72 }: { count?: number }) {
   const [pastHero, setPastHero] = useState(false);
 
   useEffect(() => {
@@ -24,7 +24,13 @@ export function FixedBubbles({ count = 50 }: { count?: number }) {
       style={{ opacity: pastHero ? 1 : 0 }}
     >
       {[...Array(count)].map((_, i) => {
-        const size = 2 + (i % 4) * 1.5;
+        // Deterministic variation (no Math.random → SSR-safe): small but varied
+        // sizes, a wide spread of speeds (some slow, some fast), and depths.
+        const size = 1.5 + ((i * 13) % 6) * 0.9; // ~1.5–6px
+        const rise = 150 + ((i * 17) % 7) * 55;
+        const duration = 3 + ((i * 7) % 10) * 0.95; // ~3–11.5s (slow & fast mix)
+        const peak = 0.16 + ((i * 5) % 5) * 0.06;
+        const drift = ((i * 11) % 5) * 6 - 12; // slight sideways sway
         return (
           <motion.div
             key={i}
@@ -32,16 +38,16 @@ export function FixedBubbles({ count = 50 }: { count?: number }) {
             style={{
               width: `${size}px`,
               height: `${size}px`,
-              left: `${(i * 53) % 100}%`,
-              bottom: `${(i * 29) % 100}%`,
+              left: `${(i * 37) % 100}%`,
+              bottom: `${(i * 23) % 100}%`,
               willChange: "transform, opacity",
             }}
-            animate={{ y: [0, -200 - (i % 5) * 50], opacity: [0, 0.3, 0] }}
+            animate={{ x: [0, drift, 0], y: [0, -rise], opacity: [0, peak, 0] }}
             transition={{
               repeat: Infinity,
               repeatType: "loop",
-              duration: 3.5 + (i % 6) * 1,
-              delay: (i % 11) * 0.45,
+              duration,
+              delay: ((i * 3) % 13) * 0.4,
               ease: "linear",
             }}
           />

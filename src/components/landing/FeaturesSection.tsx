@@ -82,6 +82,23 @@ export function FeaturesSection() {
       <div className="absolute top-[20%] right-[5%] w-96 h-96 rounded-full bg-ocean-light/40 blur-3xl" />
       <div className="absolute bottom-[-15%] left-[30%] w-80 h-80 rounded-full bg-white/15 blur-3xl" />
 
+      {/* Bubbles swaying like floating on open water (this section's own — stays). */}
+      {[...Array(46)].map((_, i) => {
+        const size = 3 + (i % 5) * 2;
+        return (
+          <motion.div
+            key={i}
+            className="absolute rounded-full bg-white/30 border border-white/20"
+            style={{ width: `${size}px`, height: `${size}px`, left: `${(i * 41) % 100}%`, top: `${(i * 23) % 100}%`, willChange: "transform, opacity" }}
+            animate={{
+              x: [0, (i % 7) * 6 - 18, (i % 5) * 9 - 14, (i % 4) * 7 - 10, 0],
+              y: [0, -((i % 6) * 5 + 6), (i % 4) * 6 - 10, -((i % 5) * 7 + 4), 0],
+              opacity: [0, 0.3 + (i % 4) * 0.15, 0.15, 0.5 + (i % 3) * 0.1, 0],
+            }}
+            transition={{ repeat: Infinity, duration: 2.6 + (i % 6) * 0.6, delay: (i % 8) * 0.4, ease: "easeInOut" }}
+          />
+        );
+      })}
 
       <div className="relative z-10 max-w-6xl mx-auto">
         <motion.div
