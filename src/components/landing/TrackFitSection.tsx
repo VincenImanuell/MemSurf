@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { Check } from "lucide-react";
 
-// Soft, glowing bubbles that drift upward — iOS-blob vibe on the warm panel.
+// Soft, glowing bubbles that drift upward — iOS-blob vibe on the navy panel.
 function GlowBubbles() {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -70,13 +70,11 @@ const asks = [
 
 export function TrackFitSection() {
   return (
-    <section className="relative bg-[linear-gradient(to_bottom,#0C4A6E_0%,#0369A1_5%,#7DC4EE_15%,#BAE6FD_26%,#E0F2FE_42%,#E0F2FE_58%,#BAE6FD_74%,#7DC4EE_85%,#0369A1_95%,#0C4A6E_100%)] py-28 px-6 overflow-hidden">
-      {/* Soft glowy blobs — kept WITHIN the light mid-band (≈30%–65%) so they never
-          bleed into the navy fade at the top/bottom seams. */}
-      <div className="absolute top-[32%] left-[6%] w-72 h-72 rounded-full bg-white/40 blur-3xl pointer-events-none" />
-      <div className="absolute top-[38%] right-[4%] w-96 h-96 rounded-full bg-white/35 blur-3xl pointer-events-none" />
-      <div className="absolute top-[50%] left-[34%] w-[26rem] h-[26rem] rounded-full bg-ocean-light/50 blur-3xl pointer-events-none" />
-      <div className="absolute top-[46%] left-[2%] w-64 h-64 rounded-full bg-wave/25 blur-3xl pointer-events-none" />
+    <section className="relative bg-navy py-28 px-6 overflow-hidden">
+      {/* Subtle ocean glows on the navy field — match the sections above & below. */}
+      <div className="absolute top-[28%] left-[6%] w-72 h-72 rounded-full bg-ocean/15 blur-3xl pointer-events-none" />
+      <div className="absolute top-[44%] right-[4%] w-96 h-96 rounded-full bg-wave/10 blur-3xl pointer-events-none" />
+      <div className="absolute top-1/2 left-[34%] w-[26rem] h-[26rem] rounded-full bg-ocean-deep/20 blur-3xl pointer-events-none" />
       <GlowBubbles />
       <div className="relative z-10 max-w-5xl mx-auto">
         <motion.div
@@ -86,11 +84,11 @@ export function TrackFitSection() {
           transition={{ duration: 0.6 }}
           className="text-center mb-14"
         >
-          <h2 className="font-serif text-5xl lg:text-6xl tracking-tight text-navy mb-3">Built for agent builders.</h2>
-          <p className="font-mono text-xs tracking-[0.25em] uppercase text-ocean-deep/70 mb-5">
+          <h2 className="font-serif text-5xl lg:text-6xl tracking-tight text-white mb-3">Built for agent builders.</h2>
+          <p className="font-mono text-xs tracking-[0.25em] uppercase text-sky-300/80 mb-5">
             Sui Overflow 2026 · Walrus Track
           </p>
-          <p className="text-navy/60 text-lg font-light max-w-2xl mx-auto">
+          <p className="text-white/60 text-lg font-light max-w-2xl mx-auto">
             &ldquo;Build AI agents and agentic workflows powered by Walrus as a verifiable data and memory layer.&rdquo;
             Here&apos;s how MemSurf answers the brief.
           </p>
@@ -104,14 +102,14 @@ export function TrackFitSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.45, delay: (i % 2) * 0.08 }}
-              className="bg-white/25 backdrop-blur-md rounded-2xl border border-white/50 ring-1 ring-white/30 shadow-lg shadow-ocean/5 p-5 flex gap-4 hover:bg-white/40 hover:border-white/70 hover:shadow-xl hover:shadow-ocean/10 transition-all"
+              className="bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 p-5 flex gap-4 hover:bg-white/[0.08] hover:border-white/20 transition-all"
             >
-              <div className="shrink-0 w-7 h-7 rounded-full bg-white/40 flex items-center justify-center mt-0.5">
-                <Check className="w-4 h-4 text-emerald-600" />
+              <div className="shrink-0 w-7 h-7 rounded-full bg-emerald-500/15 flex items-center justify-center mt-0.5">
+                <Check className="w-4 h-4 text-emerald-300" />
               </div>
               <div>
-                <h3 className="font-semibold text-navy text-sm mb-1">{a.ask}</h3>
-                <p className="text-navy/55 text-sm leading-relaxed">{a.how}</p>
+                <h3 className="font-semibold text-white text-sm mb-1">{a.ask}</h3>
+                <p className="text-white/55 text-sm leading-relaxed">{a.how}</p>
               </div>
             </motion.div>
           ))}
@@ -122,11 +120,11 @@ export function TrackFitSection() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm font-mono tracking-wide text-navy/50"
+          className="mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm font-mono tracking-wide text-white/50"
         >
-          <span>MemWal</span><span className="text-ocean">·</span>
-          <span>Walrus</span><span className="text-ocean">·</span>
-          <span>Seal</span><span className="text-ocean">·</span>
+          <span>MemWal</span><span className="text-sky-400">·</span>
+          <span>Walrus</span><span className="text-sky-400">·</span>
+          <span>Seal</span><span className="text-sky-400">·</span>
           <span>Sui testnet</span>
         </motion.div>
       </div>
