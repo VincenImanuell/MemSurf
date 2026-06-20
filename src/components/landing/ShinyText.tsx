@@ -27,6 +27,11 @@ export function ShinyText({
       className={className}
       style={{
         display: "inline-block",
+        // extend the paintable (clip) box below the baseline so descenders
+        // (g, y, p) aren't cut; negative margin keeps layout unchanged.
+        lineHeight: 1.1,
+        paddingBottom: "0.16em",
+        marginBottom: "-0.16em",
         backgroundImage: `linear-gradient(110deg, ${base} 30%, ${band} 50%, ${base} 70%)`,
         backgroundSize: "250% 100%",
         WebkitBackgroundClip: "text",
