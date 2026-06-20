@@ -70,12 +70,13 @@ const asks = [
 
 export function TrackFitSection() {
   return (
-    <section className="relative bg-[linear-gradient(to_bottom,#0C4A6E_0%,#0E5A86_7%,#BAE6FD_22%,#E0F2FE_40%,#E0F2FE_60%,#BAE6FD_78%,#0E5A86_93%,#0C4A6E_100%)] py-28 px-6 overflow-hidden">
-      {/* iOS-style soft glowy blobs floating in the cool light-blue panel */}
-      <div className="absolute -top-16 left-[6%] w-72 h-72 rounded-full bg-white/40 blur-3xl pointer-events-none" />
-      <div className="absolute top-1/4 right-[4%] w-96 h-96 rounded-full bg-white/35 blur-3xl pointer-events-none" />
-      <div className="absolute bottom-[-12%] left-[34%] w-[28rem] h-[28rem] rounded-full bg-ocean-light/60 blur-3xl pointer-events-none" />
-      <div className="absolute top-1/2 left-[2%] w-64 h-64 rounded-full bg-wave/30 blur-3xl pointer-events-none" />
+    <section className="relative bg-[linear-gradient(to_bottom,#0C4A6E_0%,#0369A1_5%,#7DC4EE_15%,#BAE6FD_26%,#E0F2FE_42%,#E0F2FE_58%,#BAE6FD_74%,#7DC4EE_85%,#0369A1_95%,#0C4A6E_100%)] py-28 px-6 overflow-hidden">
+      {/* Soft glowy blobs — kept WITHIN the light mid-band (≈30%–65%) so they never
+          bleed into the navy fade at the top/bottom seams. */}
+      <div className="absolute top-[32%] left-[6%] w-72 h-72 rounded-full bg-white/40 blur-3xl pointer-events-none" />
+      <div className="absolute top-[38%] right-[4%] w-96 h-96 rounded-full bg-white/35 blur-3xl pointer-events-none" />
+      <div className="absolute top-[50%] left-[34%] w-[26rem] h-[26rem] rounded-full bg-ocean-light/50 blur-3xl pointer-events-none" />
+      <div className="absolute top-[46%] left-[2%] w-64 h-64 rounded-full bg-wave/25 blur-3xl pointer-events-none" />
       <GlowBubbles />
       <div className="relative z-10 max-w-5xl mx-auto">
         <motion.div
