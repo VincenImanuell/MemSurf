@@ -133,6 +133,7 @@ export default function ConnectPage() {
                 <button
                   type="button"
                   onClick={() => setShowKey(!showKey)}
+                  aria-label={showKey ? "Hide delegate key" : "Show delegate key"}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-navy/40 hover:text-navy/70 transition-colors"
                 >
                   {showKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
