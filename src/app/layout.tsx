@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Nunito, Playfair_Display, JetBrains_Mono } from "next/font/google";
-import { SmoothScroll } from "@/components/SmoothScroll";
 import "./globals.css";
 
 const nunito = Nunito({
@@ -35,7 +34,6 @@ export default function RootLayout({
       className={`${nunito.variable} ${playfair.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <SmoothScroll />
         {children}
       </body>
     </html>
