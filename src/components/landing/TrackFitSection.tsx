@@ -70,16 +70,13 @@ const asks = [
 
 export function TrackFitSection() {
   return (
-    <section className="relative bg-gradient-to-b from-foam via-ocean-light to-foam py-28 px-6 overflow-hidden">
+    <section className="relative bg-[linear-gradient(to_bottom,#0C4A6E_0%,#E0F2FE_13%,#BAE6FD_50%,#E0F2FE_87%,#0C4A6E_100%)] py-28 px-6 overflow-hidden">
       {/* iOS-style soft glowy blobs floating in the cool light-blue panel */}
       <div className="absolute -top-16 left-[6%] w-72 h-72 rounded-full bg-white/40 blur-3xl pointer-events-none" />
       <div className="absolute top-1/4 right-[4%] w-96 h-96 rounded-full bg-white/35 blur-3xl pointer-events-none" />
       <div className="absolute bottom-[-12%] left-[34%] w-[28rem] h-[28rem] rounded-full bg-ocean-light/60 blur-3xl pointer-events-none" />
       <div className="absolute top-1/2 left-[2%] w-64 h-64 rounded-full bg-wave/30 blur-3xl pointer-events-none" />
       <GlowBubbles />
-      {/* Fade the light-blue panel into the navy sections above & below at both seams */}
-      <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-navy to-transparent pointer-events-none z-[1]" />
-      <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-navy to-transparent pointer-events-none z-[1]" />
       <div className="relative z-10 max-w-5xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
