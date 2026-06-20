@@ -48,7 +48,8 @@ inspect, verify, curate, route.
 - The **autonomous, long-running agents** in this submission are MemSurf's own
   **Curator Agent** (continuously scans memory for duplicates/gaps and corrects
   forward) and **Router Agent** (watches agents and routes relevant knowledge
-  between them, anchoring + messaging each decision).
+  between them, anchoring + messaging each decision — and the target agent can
+  **reject** a proposed memory with a reason, logged as its own counter-memory).
 - `coding-agent` / `research-agent` / `trading-bot` are **example client
   namespaces** — stand-ins for *your* agents. They demonstrate what MemSurf
   manages; they are **not** the deliverable. Point MemSurf at your own agent's
@@ -215,7 +216,7 @@ Honest about what's *not* built yet — future work, not claimed:
 - **Direct Seal access policies** (own Move policy for shared, permissioned memory)
 - **Cross-user** memory sharing (scoped delegate keys)
 - **Real-time** sync + more framework adapters (Mastra / agent-framework hooks — LangChain-style adapter already shipped, see above)
-- **Multi-agent negotiation** (beyond one-way routing)
+- **Multi-round negotiation** (the Router now supports single-round reject-with-reason — see below; multi-round back-and-forth is next)
 
 ## Tech stack
 

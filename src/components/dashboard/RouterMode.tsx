@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Share2, ArrowRight, Play, AlertCircle, CheckCircle, Loader2, Check, Radio, Pencil, Anchor, Mail } from "lucide-react";
+import { Share2, ArrowRight, Play, AlertCircle, CheckCircle, Loader2, Check, Radio, Pencil, Anchor, Mail, Ban, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const LIVE_INTERVAL_MS = 60_000; // poll once a minute — well within the rate limit
@@ -31,6 +31,7 @@ interface MessagingRef {
 }
 interface ApplyResult {
   routed: number;
+  rejected?: number;
   anchor: AnchorRef | null;
   messaging?: MessagingRef | null;
 }
@@ -60,6 +61,11 @@ export function RouterMode({ namespace, namespaces }: { namespace: string; names
   const [routedCount, setRoutedCount] = useState<number | null>(null);
   const [anchorTx, setAnchorTx] = useState<AnchorRef | null>(null);
   const [messaging, setMessaging] = useState<MessagingRef | null>(null);
+  // P4 negotiation: target agent can reject a proposed memory with a reason.
+  const [rejections, setRejections] = useState<Map<string, string>>(new Map());
+  const [rejectingId, setRejectingId] = useState<string | null>(null);
+  const [rejectDraft, setRejectDraft] = useState("");
+  const [rejectedCount, setRejectedCount] = useState<number | null>(null);
   const [showInterests, setShowInterests] = useState(false);
 
   // Editable agent name (cosmetic — the storage namespace stays "memory-router").
@@ -150,8 +156,11 @@ export function RouterMode({ namespace, namespaces }: { namespace: string; names
     setError(null);
     setCandidates(null);
     setRoutedCount(null);
+    setRejectedCount(null);
     setAnchorTx(null);
     setMessaging(null);
+    setRejections(new Map());
+    setRejectingId(null);
     try {
       const data = await callMemWal<RouteResult>("route", {
         sourceNamespace: source,
@@ -171,7 +180,10 @@ export function RouterMode({ namespace, namespaces }: { namespace: string; names
   const handleApply = async () => {
     if (!candidates) return;
     const chosen = candidates.filter((c) => selected.has(c.blob_id));
-    if (chosen.length === 0) return;
+    const rejected = candidates
+      .filter((c) => rejections.has(c.blob_id))
+      .map((c) => ({ text: c.text, reason: rejections.get(c.blob_id) as string }));
+    if (chosen.length === 0 && rejected.length === 0) return;
     const { callMemWal } = await import("@/lib/api");
     setApplying(true);
     setError(null);
@@ -180,8 +192,10 @@ export function RouterMode({ namespace, namespaces }: { namespace: string; names
         sourceNamespace: source,
         targetNamespace: target,
         items: chosen.map((c) => ({ text: c.text, matchedInterest: c.matchedInterest, distance: c.distance })),
+        rejections: rejected,
       });
       setRoutedCount(res.routed);
+      setRejectedCount(res.rejected ?? rejected.length);
       setAnchorTx(res.anchor ?? null);
       setMessaging(res.messaging ?? null);
       setCandidates(null);
@@ -192,13 +206,36 @@ export function RouterMode({ namespace, namespaces }: { namespace: string; names
     }
   };
 
-  const toggle = (id: string) =>
+  // P4: capture a rejection reason; rejected memories are excluded from routing
+  // and instead logged as the target agent's counter-memory.
+  const confirmReject = (id: string) => {
+    const reason = rejectDraft.trim();
+    if (!reason) return;
+    setRejections((prev) => new Map(prev).set(id, reason));
+    setSelected((prev) => {
+      const next = new Set(prev);
+      next.delete(id);
+      return next;
+    });
+    setRejectingId(null);
+    setRejectDraft("");
+  };
+  const undoReject = (id: string) =>
+    setRejections((prev) => {
+      const next = new Map(prev);
+      next.delete(id);
+      return next;
+    });
+
+  const toggle = (id: string) => {
+    if (rejections.has(id)) return; // rejected cards can't be selected — undo first
     setSelected((prev) => {
       const next = new Set(prev);
       if (next.has(id)) next.delete(id);
       else next.add(id);
       return next;
     });
+  };
 
   // Solid background + explicit option colors so the native dropdown list stays
   // readable in dark mode (translucent bg would render white-on-white options).
@@ -393,12 +430,20 @@ export function RouterMode({ namespace, namespaces }: { namespace: string; names
         </div>
       )}
 
-      {routedCount !== null && (
+      {(routedCount !== null || rejectedCount !== null) && (
         <div className="mt-4 space-y-1.5">
-          <div className="flex items-center gap-2 text-emerald-600 text-sm font-medium dark:text-emerald-300">
-            <CheckCircle className="w-4 h-4" />
-            Routed {routedCount} memor{routedCount === 1 ? "y" : "ies"} into {target}. Switch the namespace to {target} to see them.
-          </div>
+          {routedCount !== null && routedCount > 0 && (
+            <div className="flex items-center gap-2 text-emerald-600 text-sm font-medium dark:text-emerald-300">
+              <CheckCircle className="w-4 h-4" />
+              Routed {routedCount} memor{routedCount === 1 ? "y" : "ies"} into {target}. Switch the namespace to {target} to see them.
+            </div>
+          )}
+          {rejectedCount !== null && rejectedCount > 0 && (
+            <div className="flex items-center gap-2 text-amber-600 text-sm font-medium dark:text-amber-300">
+              <Ban className="w-4 h-4" />
+              {target} rejected {rejectedCount} memor{rejectedCount === 1 ? "y" : "ies"} — logged as its counter-memory on Walrus (Reason kept as an audit trail).
+            </div>
+          )}
           {messaging?.delivered && (
             <div className="flex items-center gap-1.5 text-xs text-ocean font-medium dark:text-sky-300">
               <Mail className="w-3.5 h-3.5" />
@@ -440,11 +485,12 @@ export function RouterMode({ namespace, namespaces }: { namespace: string; names
               {candidates.length > 0 && (
                 <Button
                   onClick={handleApply}
-                  disabled={applying || selected.size === 0}
+                  disabled={applying || (selected.size === 0 && rejections.size === 0)}
                   className="bg-ocean text-white rounded-xl text-sm h-9 px-4 hover:bg-ocean-deep"
                 >
                   {applying ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Share2 className="w-4 h-4 mr-2" />}
                   Route {selected.size} → {target}
+                  {rejections.size > 0 && ` · reject ${rejections.size}`}
                 </Button>
               )}
             </div>
@@ -456,34 +502,110 @@ export function RouterMode({ namespace, namespaces }: { namespace: string; names
             )}
 
             {candidates.map((c) => {
-              const on = selected.has(c.blob_id);
+              const rejected = rejections.has(c.blob_id);
+              const on = selected.has(c.blob_id) && !rejected;
+              const editing = rejectingId === c.blob_id;
               return (
-                <button
+                <div
                   key={c.blob_id}
-                  onClick={() => toggle(c.blob_id)}
-                  className={`w-full text-left rounded-2xl border p-4 transition-colors ${
-                    on
+                  className={`w-full rounded-2xl border p-4 transition-colors ${
+                    rejected
+                      ? "bg-amber-50 border-amber-200 dark:bg-amber-500/10 dark:border-amber-400/25"
+                      : on
                       ? "bg-ocean/5 border-ocean/30 dark:bg-sky-400/10 dark:border-sky-300/30"
                       : "bg-white border-ocean/10 dark:bg-slate-900 dark:border-white/10"
                   }`}
                 >
                   <div className="flex items-start gap-3">
-                    <span
+                    <button
+                      type="button"
+                      onClick={() => toggle(c.blob_id)}
+                      disabled={rejected}
+                      aria-label="Select memory to route"
                       className={`mt-0.5 w-5 h-5 rounded-md border flex items-center justify-center shrink-0 ${
                         on ? "bg-ocean border-ocean text-white" : "border-navy/20 dark:border-white/20"
-                      }`}
+                      } ${rejected ? "opacity-30" : ""}`}
                     >
                       {on && <Check className="w-3.5 h-3.5" />}
-                    </span>
+                    </button>
                     <div className="flex-1">
-                      <p className="text-sm text-navy leading-relaxed dark:text-white/85">{c.text}</p>
+                      <p
+                        className={`text-sm leading-relaxed ${
+                          rejected ? "text-navy/40 line-through dark:text-white/40" : "text-navy dark:text-white/85"
+                        }`}
+                      >
+                        {c.text}
+                      </p>
                       <p className="text-xs text-navy/40 mt-1.5 dark:text-white/40">
                         {Math.round((1 - c.distance) * 100)}% relevant to{" "}
                         <span className="text-ocean dark:text-sky-300">&ldquo;{c.matchedInterest}&rdquo;</span>
                       </p>
+
+                      {rejected && (
+                        <div className="mt-2 flex items-start gap-2 text-xs text-amber-700 dark:text-amber-300">
+                          <Ban className="w-3.5 h-3.5 mt-0.5 shrink-0" />
+                          <span className="flex-1">
+                            Rejected by {target}: {rejections.get(c.blob_id)}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => undoReject(c.blob_id)}
+                            className="underline hover:no-underline shrink-0"
+                          >
+                            undo
+                          </button>
+                        </div>
+                      )}
+
+                      {editing && (
+                        <div className="mt-2.5">
+                          <textarea
+                            autoFocus
+                            value={rejectDraft}
+                            onChange={(e) => setRejectDraft(e.target.value)}
+                            placeholder={`Why is this not relevant to ${target}?`}
+                            rows={2}
+                            className="w-full text-sm rounded-lg border border-amber-300 bg-white px-3 py-2 outline-none focus:border-amber-500 text-navy dark:bg-slate-800 dark:text-white dark:border-amber-400/30"
+                          />
+                          <div className="mt-1.5 flex items-center gap-2">
+                            <button
+                              type="button"
+                              onClick={() => confirmReject(c.blob_id)}
+                              disabled={!rejectDraft.trim()}
+                              className="text-xs font-medium px-3 py-1.5 rounded-lg bg-amber-500 text-white hover:bg-amber-600 disabled:opacity-40"
+                            >
+                              Confirm rejection
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setRejectingId(null);
+                                setRejectDraft("");
+                              }}
+                              className="text-xs text-navy/50 hover:text-navy dark:text-white/50"
+                            >
+                              cancel
+                            </button>
+                          </div>
+                        </div>
+                      )}
                     </div>
+
+                    {!rejected && !editing && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setRejectingId(c.blob_id);
+                          setRejectDraft("");
+                        }}
+                        title={`Reject — ${target} declines this memory with a reason`}
+                        className="shrink-0 text-navy/30 hover:text-amber-600 dark:text-white/30 dark:hover:text-amber-300"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    )}
                   </div>
-                </button>
+                </div>
               );
             })}
           </motion.div>

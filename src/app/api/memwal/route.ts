@@ -35,6 +35,7 @@ interface Body {
   threshold?: number;
   novelOnly?: boolean;
   items?: { text: string; matchedInterest?: string; distance?: number }[];
+  rejections?: { text: string; reason: string }[];
   filename?: string;
   contentType?: string;
   dataBase64?: string;
@@ -446,40 +447,73 @@ export async function POST(req: Request) {
         const target = body.targetNamespace ?? "default";
         const source = body.sourceNamespace ?? "unknown";
         const items = (body.items ?? []).slice(0, 6);
-        if (items.length === 0) return NextResponse.json({ error: "No memories selected" }, { status: 400 });
+        const rejections = (body.rejections ?? []).slice(0, 6);
+        if (items.length === 0 && rejections.length === 0) {
+          return NextResponse.json({ error: "No memories accepted or rejected" }, { status: 400 });
+        }
 
-        // Submit the copies without blocking on the (sometimes slow) relayer
-        // indexing — the jobs finish in the background, well within a refresh.
-        await memwal.rememberBulk(items.map((i) => ({ text: i.text, namespace: target })));
+        let messaging: MessagingResult | null = null;
+        let anchor: { digest: string; suiscan: string } | null = null;
 
-        // One audit entry summarising what the Router did (meta-memory).
-        const summary =
-          `Router Agent routed ${items.length} memor${items.length === 1 ? "y" : "ies"} ` +
-          `from "${source}" → "${target}". ` +
-          items.map((i) => `· "${i.text.slice(0, 50)}${i.text.length > 50 ? "…" : ""}" (relevance to "${i.matchedInterest ?? "n/a"}")`).join(" ");
-        await memwal.remember(summary, "memory-router");
+        if (items.length > 0) {
+          // Submit the copies without blocking on the (sometimes slow) relayer
+          // indexing — the jobs finish in the background, well within a refresh.
+          await memwal.rememberBulk(items.map((i) => ({ text: i.text, namespace: target })));
 
-        // Messaging leg: notify the target agent that new knowledge arrived.
-        // The notification is recorded as a verifiable memory on Walrus in the
-        // target's `inbox:<target>` namespace (always, demoable), and — if a Sui
-        // Stack Messaging signer is configured — also sent on-chain (best-effort,
-        // no-op otherwise). This makes the handoff a real message, not a silent copy.
-        const channel = `inbox:${target}`;
-        const messageBody = routeMessageBody({ source, target, count: items.length, summary });
-        await memwal.remember(messageBody, channel);
-        const onChain = await sendRouteMessageOnChain({ source, target, count: items.length, summary });
-        const messaging: MessagingResult = { channel, delivered: true, onChain };
+          // One audit entry summarising what the Router did (meta-memory).
+          const summary =
+            `Router Agent routed ${items.length} memor${items.length === 1 ? "y" : "ies"} ` +
+            `from "${source}" → "${target}". ` +
+            items.map((i) => `· "${i.text.slice(0, 50)}${i.text.length > 50 ? "…" : ""}" (relevance to "${i.matchedInterest ?? "n/a"}")`).join(" ");
+          await memwal.remember(summary, "memory-router");
 
-        // Best-effort: anchor this routing decision on Sui (no-op until the
-        // MemSurf Move contract + signer env are configured).
-        const anchor = await anchorRouting({
-          source,
+          // Messaging leg: notify the target agent that new knowledge arrived.
+          // The notification is recorded as a verifiable memory on Walrus in the
+          // target's `inbox:<target>` namespace (always, demoable), and — if a Sui
+          // Stack Messaging signer is configured — also sent on-chain (best-effort,
+          // no-op otherwise). This makes the handoff a real message, not a silent copy.
+          const channel = `inbox:${target}`;
+          const messageBody = routeMessageBody({ source, target, count: items.length, summary });
+          await memwal.remember(messageBody, channel);
+          const onChain = await sendRouteMessageOnChain({ source, target, count: items.length, summary });
+          messaging = { channel, delivered: true, onChain };
+
+          // Best-effort: anchor this routing decision on Sui (no-op until the
+          // MemSurf Move contract + signer env are configured).
+          anchor = await anchorRouting({
+            source,
+            target,
+            count: items.length,
+            digestHex: digestOf(items.map((i) => i.text)),
+          });
+        }
+
+        // Negotiation leg: the target agent can REJECT a proposed memory with a
+        // reason. Rejected memories are NOT copied — instead each rejection is
+        // logged as the target's own counter-memory on Walrus (so the agent
+        // "remembers" why it declined), plus one audit line in memory-router.
+        if (rejections.length > 0) {
+          await memwal.rememberBulk(
+            rejections.map((r) => ({
+              text: `Declined a memory proposed from "${source}": "${r.text.slice(0, 80)}${r.text.length > 80 ? "…" : ""}". Reason: ${r.reason}`,
+              namespace: target,
+            }))
+          );
+          const rejectSummary =
+            `"${target}" rejected ${rejections.length} memor${rejections.length === 1 ? "y" : "ies"} ` +
+            `proposed from "${source}". ` +
+            rejections.map((r) => `· "${r.text.slice(0, 40)}${r.text.length > 40 ? "…" : ""}" (reason: ${r.reason})`).join(" ");
+          await memwal.remember(rejectSummary, "memory-router");
+        }
+
+        return NextResponse.json({
+          routed: items.length,
+          rejected: rejections.length,
           target,
-          count: items.length,
-          digestHex: digestOf(items.map((i) => i.text)),
+          source,
+          anchor,
+          messaging,
         });
-
-        return NextResponse.json({ routed: items.length, target, source, anchor, messaging });
       }
 
       default:
