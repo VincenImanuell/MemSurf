@@ -13,7 +13,12 @@ declare global {
 export function SmoothScroll() {
   const pathname = usePathname();
 
+  // Smooth-scroll ONLY the landing page. The app pages (/dashboard, /connect,
+  // /setup-guide) have their own internal scroll containers that Lenis would
+  // hijack and break — so they use native scroll.
   useEffect(() => {
+    if (pathname !== "/") return;
+
     const lenis = new Lenis({
       duration: 1.2,
       easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -34,7 +39,7 @@ export function SmoothScroll() {
       lenis.destroy();
       window.__lenis = undefined;
     };
-  }, []);
+  }, [pathname]);
 
   // Next.js client-side navigation swaps page content without firing a
   // resize event, so Lenis keeps the previous page's scroll-height limits.

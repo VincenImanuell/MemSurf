@@ -75,7 +75,7 @@ export default function DashboardPage() {
   return (
     <div
       className={cn(
-        "flex min-h-screen bg-seafoam transition-colors duration-300",
+        "flex h-screen overflow-hidden bg-seafoam transition-colors duration-300",
         isDarkMode && "dark bg-slate-950"
       )}
     >
