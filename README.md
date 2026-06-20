@@ -22,7 +22,10 @@ the missing layer that makes [Walrus Memory (MemWal)](https://docs.wal.app/walru
 
 ## 👩‍⚖️ For judges — evaluate in 2 minutes
 
-No account, no setup. Everything below runs against **real Walrus testnet data**.
+No account, no setup. Everything below runs against **real Walrus testnet data** — served from a
+**MemWal (Walrus Memory) account I prepared specifically for this MemSurf demo**, so you can explore
+real on-chain data with no account of your own. (To use your *own* agents instead, bring a delegate
+key — see [Quickstart](#quickstart).)
 
 1. Open **[memsurf.vercel.app](https://memsurf.vercel.app)** → **Launch App** → **“Explore the demo (no account needed)”**.
 2. **Discover** — real memories, surfaced from Walrus. Switch the namespace (top bar) between `coding-agent`, `research-agent`, `trading-bot` — *example agents that stand in for your own; MemSurf is the layer that manages them, not the agents themselves.*
@@ -48,12 +51,19 @@ inspect, verify, curate, route.
 - The **autonomous, long-running agents** in this submission are MemSurf's own
   **Curator Agent** (continuously scans memory for duplicates/gaps and corrects
   forward) and **Router Agent** (watches agents and routes relevant knowledge
-  between them, anchoring + messaging each decision — and the target agent can
-  **reject** a proposed memory with a reason, logged as its own counter-memory).
+  between them, anchoring + messaging each decision — and the target side can
+  **reject** a proposed memory with a reason (a single-round, reviewer-driven
+  control in the UI), logged as its own counter-memory).
 - `coding-agent` / `research-agent` / `trading-bot` are **example client
   namespaces** — stand-ins for *your* agents. They demonstrate what MemSurf
   manages; they are **not** the deliverable. Point MemSurf at your own agent's
   namespace and it works exactly the same.
+- **MemSurf doesn't create memories — your agents do.** In normal use, memories
+  are written **automatically** by the agents themselves as they use Walrus
+  Memory (the MemWal SDK) — that's the main path. MemSurf then **reads, verifies,
+  curates, and routes** that memory. The **Add Memory** screen is just a manual
+  shortcut to write or seed a memory by hand (handy for testing — and what the
+  demo video uses); it is *not* how memory normally gets in.
 
 So: the deliverable is the **horizontal memory-management layer**, not any one
 vertical agent.
