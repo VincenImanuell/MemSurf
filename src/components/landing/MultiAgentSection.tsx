@@ -29,7 +29,7 @@ function AgentCard({
 
 export function MultiAgentSection() {
   return (
-    <section id="agents" className="relative bg-navy text-white py-28 px-6 overflow-hidden">
+    <section id="agents" className="relative bg-navy text-white py-28 px-6 overflow-hidden border-t border-white/10">
       <div className="max-w-5xl mx-auto relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

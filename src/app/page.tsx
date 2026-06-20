@@ -28,7 +28,7 @@ export default function Home() {
         {/* HowItWorks + Footer share one continuous navy field with a single
             rising-bubble layer, divided only by a thin line — so the bubbles
             don't visibly cut at the section seam. */}
-        <div className="relative bg-navy overflow-hidden">
+        <div className="relative bg-navy overflow-hidden border-t border-white/10">
           <div className="relative z-10">
             <HowItWorks />
             <Footer />

@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 // page scrolls — they don't "rise with" the content. Transform/opacity only
 // (GPU-composited) + pointer-events-none, so it never adds scroll jank.
 // Fades in only after the hero is scrolled past (the hero keeps its own look).
-export function FixedBubbles({ count = 26 }: { count?: number }) {
+export function FixedBubbles({ count = 50 }: { count?: number }) {
   const [pastHero, setPastHero] = useState(false);
 
   useEffect(() => {
@@ -36,12 +36,12 @@ export function FixedBubbles({ count = 26 }: { count?: number }) {
               bottom: `${(i * 29) % 100}%`,
               willChange: "transform, opacity",
             }}
-            animate={{ y: [0, -180 - (i % 5) * 40], opacity: [0, 0.26, 0] }}
+            animate={{ y: [0, -200 - (i % 5) * 50], opacity: [0, 0.3, 0] }}
             transition={{
               repeat: Infinity,
               repeatType: "loop",
-              duration: 9 + (i % 7) * 1.6,
-              delay: (i % 9) * 0.8,
+              duration: 3.5 + (i % 6) * 1,
+              delay: (i % 11) * 0.45,
               ease: "linear",
             }}
           />

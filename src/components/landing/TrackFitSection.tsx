@@ -32,7 +32,7 @@ const asks = [
 
 export function TrackFitSection() {
   return (
-    <section className="relative bg-navy py-28 px-6 overflow-hidden">
+    <section className="relative bg-navy py-28 px-6 overflow-hidden border-t border-white/10">
       {/* Subtle ocean glows on the navy field — match the sections above & below. */}
       <div className="absolute top-[28%] left-[6%] w-72 h-72 rounded-full bg-ocean/15 blur-3xl pointer-events-none" />
       <div className="absolute top-[44%] right-[4%] w-96 h-96 rounded-full bg-wave/10 blur-3xl pointer-events-none" />
