@@ -54,7 +54,10 @@ Copy-paste fields for the Overflow 2026 submission form.
 **Links**
 - Live demo / Website: https://memsurf.vercel.app
 - GitHub (public): https://github.com/VincenImanuell/MemSurf
-- Walrus Sites page: _<run `site-builder publish` in `walrus-site/` and paste the `*.walrus.site` URL>_
+- Walrus Sites page: **live on Walrus testnet** — Site object
+  [`0x1445d8ca…`](https://suiscan.xyz/testnet/object/0x1445d8ca1aa7feef197afab8270ccd6811cb571994c37706a584509371200e78)
+  (type `::site::Site`). Browse via a testnet portal: `http://i6ua4t4now571z0d3q1sloifnv77odb9pjnepo031ruh3hrw8.localhost:3000`
+  (self-hosted portal). _wal.app portal only serves mainnet sites._
 - Demo video: _<YouTube link — add after recording>_
 
 **Deployment**
