@@ -128,7 +128,7 @@ export default function DashboardPage() {
             <SearchMode namespace={namespace} namespaces={AGENTS} />
           </div>
           <div className={mode === "add" ? "" : "hidden"}>
-            <AddMemoryMode namespace={namespace} namespaces={NAMESPACES} />
+            <AddMemoryMode namespace={namespace} />
           </div>
           <div className={mode === "capture" ? "" : "hidden"}>
             <CaptureMode namespace={namespace} />

@@ -1,26 +1,22 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, CheckCircle, Loader2, AlertCircle } from "lucide-react";
+import { Plus, CheckCircle, Loader2, AlertCircle, Layers } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { callMemWal } from "@/lib/api";
 
-export function AddMemoryMode({ namespace, namespaces }: { namespace: string; namespaces: string[] }) {
+export function AddMemoryMode({ namespace }: { namespace: string }) {
   const [text, setText] = useState("");
-  const [ns, setNs] = useState(namespace);
   const [status, setStatus] = useState<"idle" | "saving" | "done">("idle");
   const [error, setError] = useState<string | null>(null);
-
-  // Keep the target namespace in sync with the header selector.
-  useEffect(() => setNs(namespace), [namespace]);
 
   const handleAdd = async () => {
     if (!text.trim()) return;
     setStatus("saving");
     setError(null);
     try {
-      await callMemWal("remember", { text: text.trim(), namespace: ns.trim() || "default" });
+      await callMemWal("remember", { text: text.trim(), namespace });
       setStatus("done");
       setText("");
       setTimeout(() => setStatus("idle"), 2500);
@@ -49,17 +45,11 @@ export function AddMemoryMode({ namespace, namespaces }: { namespace: string; na
           />
         </div>
 
-        <div className="space-y-1.5">
-          <label className="text-sm font-medium text-navy dark:text-white">Namespace (agent)</label>
-          <select
-            value={ns}
-            onChange={(e) => setNs(e.target.value)}
-            className="w-full px-3 py-2 rounded-xl border border-ocean/20 bg-white text-navy text-sm outline-none focus:border-ocean dark:border-white/10 dark:bg-slate-800 dark:text-white [&_option]:text-navy dark:[&_option]:bg-slate-800 dark:[&_option]:text-white"
-          >
-            {namespaces.map((n) => (
-              <option key={n} value={n}>{n}</option>
-            ))}
-          </select>
+        <div className="flex items-center gap-2 text-xs text-navy/50 dark:text-white/50">
+          <Layers className="w-3.5 h-3.5 text-ocean" />
+          Saving to
+          <span className="font-medium text-navy dark:text-white">{namespace}</span>
+          <span className="text-navy/35 dark:text-white/35">· change it in the top bar</span>
         </div>
 
         <Button
