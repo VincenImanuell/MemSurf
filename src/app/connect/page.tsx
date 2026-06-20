@@ -187,9 +187,9 @@ export default function ConnectPage() {
               type="button"
               onClick={handleDemo}
               disabled={isConnecting || isDemoLoading}
-              className="w-full text-center text-xs text-ocean/70 hover:text-ocean transition-colors py-1 disabled:opacity-50"
+              className="mt-1 w-full cursor-pointer rounded-xl bg-ocean-deep hover:bg-navy text-white text-sm font-semibold py-3.5 shadow-lg shadow-ocean-deep/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isDemoLoading ? "Loading demo…" : "✦ Explore the demo (no account needed)"}
+              {isDemoLoading ? "Loading demo…" : "✦ Explore the demo — no account needed"}
             </button>
           </div>
 
