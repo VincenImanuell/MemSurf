@@ -6,7 +6,7 @@ import { MultiAgentSection } from "@/components/landing/MultiAgentSection";
 import { TrackFitSection } from "@/components/landing/TrackFitSection";
 import { HowItWorks } from "@/components/landing/HowItWorks";
 import { Footer } from "@/components/landing/Footer";
-import { SubtleBubbles } from "@/components/landing/SubtleBubbles";
+import { FixedBubbles } from "@/components/landing/FixedBubbles";
 import { LandingLoadGate } from "@/components/landing/LandingLoadGate";
 
 export default function Home() {
@@ -14,6 +14,8 @@ export default function Home() {
     <LandingLoadGate>
       <main className="flex flex-col">
         <Navbar />
+        {/* viewport-pinned ambient bubbles for all post-hero sections (stay put on scroll) */}
+        <FixedBubbles />
         <div className="relative z-10">
           <Hero />
           <ProblemSection />
@@ -27,7 +29,6 @@ export default function Home() {
             rising-bubble layer, divided only by a thin line — so the bubbles
             don't visibly cut at the section seam. */}
         <div className="relative bg-navy overflow-hidden">
-          <SubtleBubbles count={46} />
           <div className="relative z-10">
             <HowItWorks />
             <Footer />

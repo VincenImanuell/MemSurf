@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { SubtleBubbles } from "./SubtleBubbles";
 
 const problems = [
   {
@@ -24,7 +23,6 @@ const problems = [
 export function ProblemSection() {
   return (
     <section className="relative z-20 bg-navy text-white py-28 px-6 overflow-hidden rounded-b-[44px] lg:rounded-b-[80px]">
-      <SubtleBubbles count={26} />
       <div className="max-w-6xl mx-auto relative z-10">
         <div className="grid lg:grid-cols-2 gap-16 items-center mb-20">
           <motion.div

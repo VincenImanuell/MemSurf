@@ -133,7 +133,7 @@ export function FeaturesSection() {
               <motion.div
                 animate={{ y: [0, -14, 0] }}
                 transition={{ repeat: Infinity, duration: 5.5 + i * 0.4, delay: i * 0.25, ease: "easeInOut" }}
-                className="group relative h-full bg-white/10 backdrop-blur-md rounded-[24px] p-6 border border-white/20 hover:border-white/40 transition-all hover:shadow-lg"
+                className="group relative h-full bg-white/10 rounded-[24px] p-6 border border-white/20 hover:border-white/40 transition-all hover:shadow-lg"
               >
                 <div className="w-12 h-12 rounded-xl bg-white/15 flex items-center justify-center mb-5">
                   <f.icon className="w-6 h-6 text-white" />
@@ -197,7 +197,7 @@ export function FeaturesSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="rounded-[28px] bg-white/10 backdrop-blur-md border border-white/20 p-6 grid grid-cols-2 md:grid-cols-4 gap-4"
+          className="rounded-[28px] bg-white/10 border border-white/20 p-6 grid grid-cols-2 md:grid-cols-4 gap-4"
         >
           {stack.map((s) => (
             <div key={s.name} className="text-center">

@@ -3,44 +3,6 @@
 import { motion } from "framer-motion";
 import { Check } from "lucide-react";
 
-// Soft, glowing bubbles that drift upward — iOS-blob vibe on the navy panel.
-function GlowBubbles() {
-  return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {[...Array(16)].map((_, i) => {
-        const size = 10 + (i % 5) * 7;
-        return (
-          <motion.div
-            key={i}
-            className="absolute rounded-full"
-            style={{
-              width: `${size}px`,
-              height: `${size}px`,
-              left: `${(i * 61) % 100}%`,
-              bottom: `${(i * 37) % 100}%`,
-              background:
-                "radial-gradient(circle at 35% 30%, #ffffff 0%, rgba(255,255,255,0.8) 38%, rgba(56,189,248,0.3) 72%, transparent 100%)",
-              boxShadow: `0 0 ${size * 1.1}px rgba(255,255,255,0.55)`,
-            }}
-            animate={{
-              y: [0, -140 - (i % 5) * 24],
-              opacity: [0, 0.9, 0],
-              scale: [0.7, 1.15, 0.7],
-            }}
-            transition={{
-              repeat: Infinity,
-              repeatType: "loop",
-              duration: 7 + (i % 6) * 1.3,
-              delay: (i % 8) * 0.7,
-              ease: "linear",
-            }}
-          />
-        );
-      })}
-    </div>
-  );
-}
-
 const asks = [
   {
     ask: "Long-term, verifiable memory for agents",
@@ -75,7 +37,6 @@ export function TrackFitSection() {
       <div className="absolute top-[28%] left-[6%] w-72 h-72 rounded-full bg-ocean/15 blur-3xl pointer-events-none" />
       <div className="absolute top-[44%] right-[4%] w-96 h-96 rounded-full bg-wave/10 blur-3xl pointer-events-none" />
       <div className="absolute top-1/2 left-[34%] w-[26rem] h-[26rem] rounded-full bg-ocean-deep/20 blur-3xl pointer-events-none" />
-      <GlowBubbles />
       <div className="relative z-10 max-w-5xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -102,7 +63,7 @@ export function TrackFitSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.45, delay: (i % 2) * 0.08 }}
-              className="bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 p-5 flex gap-4 hover:bg-white/[0.08] hover:border-white/20 transition-all"
+              className="bg-white/5 rounded-2xl border border-white/10 p-5 flex gap-4 hover:bg-white/[0.08] hover:border-white/20 transition-all"
             >
               <div className="shrink-0 w-7 h-7 rounded-full bg-emerald-500/15 flex items-center justify-center mt-0.5">
                 <Check className="w-4 h-4 text-emerald-300" />

@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion";
 import { FlaskConical, TrendingUp, Share2, ArrowRight } from "lucide-react";
-import { SubtleBubbles } from "./SubtleBubbles";
 
 function AgentCard({
   icon: Icon,
@@ -17,7 +16,7 @@ function AgentCard({
 }) {
   return (
     <div className={`w-full max-w-[200px] ${align === "right" ? "lg:ml-auto" : ""}`}>
-      <div className="bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 p-5">
+      <div className="bg-white/10 rounded-2xl border border-white/20 p-5">
         <div className="w-11 h-11 rounded-xl bg-white/15 flex items-center justify-center mb-3">
           <Icon className="w-5 h-5 text-white" />
         </div>
@@ -31,7 +30,6 @@ function AgentCard({
 export function MultiAgentSection() {
   return (
     <section id="agents" className="relative bg-navy text-white py-28 px-6 overflow-hidden">
-      <SubtleBubbles count={28} />
       <div className="max-w-5xl mx-auto relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
