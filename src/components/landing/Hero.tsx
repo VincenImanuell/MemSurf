@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { ArrowRight, Waves } from "lucide-react";
 import { MagneticButton } from "./MagneticButton";
 import { HoloShine } from "./HoloShine";
+import { ShinyText } from "./ShinyText";
 
 export function Hero() {
   return (
@@ -70,7 +71,7 @@ export function Hero() {
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/15 border border-white/30 text-white/90 font-mono text-xs tracking-widest uppercase mb-8"
           >
             <Waves className="w-4 h-4" />
-            Powered by Walrus Memory
+            <ShinyText duration={6} glow="rgba(255,255,255,0.5)">Powered by Walrus Memory</ShinyText>
           </motion.div>
 
           <motion.h1
@@ -79,9 +80,12 @@ export function Hero() {
             transition={{ duration: 0.7, delay: 0.4 }}
             className="font-serif text-6xl md:text-7xl lg:text-8xl font-medium text-white mb-6 leading-[1.05] tracking-tight"
           >
-            Ride Your
+            <ShinyText>Ride Your</ShinyText>
             <br />
-            <span className="italic text-sunset-light">Agents&apos;</span> Memory
+            <ShinyText base="#FDBA74" band="#fff6ea" glow="rgba(253,186,116,0.5)" className="italic">
+              Agents&apos;
+            </ShinyText>{" "}
+            <ShinyText>Memory</ShinyText>
           </motion.h1>
 
           <motion.p
