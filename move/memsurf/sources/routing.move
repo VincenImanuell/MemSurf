@@ -60,3 +60,47 @@ public entry fun anchor_routing(
 public fun total(registry: &RoutingRegistry): u64 {
     registry.total
 }
+
+#[test_only]
+use sui::test_scenario as ts;
+#[test_only]
+use sui::clock;
+
+#[test]
+fun test_init_creates_empty_registry() {
+    let admin = @0xA;
+    let mut scenario = ts::begin(admin);
+    init(scenario.ctx());
+    scenario.next_tx(admin);
+    {
+        let registry = scenario.take_shared<RoutingRegistry>();
+        assert!(registry.total() == 0, 0);
+        ts::return_shared(registry);
+    };
+    scenario.end();
+}
+
+#[test]
+fun test_anchor_routing_increments_total() {
+    let admin = @0xA;
+    let mut scenario = ts::begin(admin);
+    init(scenario.ctx());
+    scenario.next_tx(admin);
+    {
+        let mut registry = scenario.take_shared<RoutingRegistry>();
+        let clk = clock::create_for_testing(scenario.ctx());
+
+        anchor_routing(&mut registry, b"research-agent", b"trading-bot", 3, b"deadbeef", &clk);
+        assert!(registry.total() == 1, 1);
+
+        anchor_routing(&mut registry, b"coding-agent", b"research-agent", 1, b"00ff", &clk);
+        assert!(registry.total() == 2, 2);
+
+        anchor_routing(&mut registry, b"a", b"b", 7, b"abcd", &clk);
+        assert!(registry.total() == 3, 3);
+
+        clock::destroy_for_testing(clk);
+        ts::return_shared(registry);
+    };
+    scenario.end();
+}
