@@ -56,6 +56,9 @@ const SEED = {
     "Position sizing capped at 2% of portfolio per trade to limit drawdown.",
     "Stop-loss set at 5% below entry price for all long positions.",
     "Backtested the base strategy on 3 years of BTC/USD — Sharpe ratio 1.4.",
+    // the reverse gem — a live result relevant to research-agent, which doesn't
+    // have it yet (so the Two-way Router routes trading -> research as novel):
+    "Live execution showed Pearson-correlation pairs decay fast — edge half-life ~9 days, correlation broke down after ~2 weeks; periodic re-selection needed.",
   ],
 };
 

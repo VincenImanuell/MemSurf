@@ -111,12 +111,21 @@ rising like an ocean — and the agent **drowns** in it.
 So MemSurf isn't *just* a dashboard. It's a dashboard **plus working agents** — the missing layer that
 makes [Walrus Memory (MemWal)](https://docs.wal.app/walrus-memory) actually adoptable.
 
-> **Honest scope.** Curator and Router are **memory-driven agents** — they *perceive* (recall +
-> embeddings), *decide* (semantic scoring, gap checks), and *act* (remember / route / anchor) over
-> Walrus memory, with no human in the loop. They are **not** LLM chatbots. `coding-agent` /
-> `research-agent` / `trading-bot` are **example client namespaces** — stand-ins for *your* agents,
-> there to show what MemSurf rides. They are **not** the deliverable; point MemSurf at your own agent's
-> namespace and everything works the same.
+> ### ⚠️ What is — and isn't — the submission
+>
+> **The submission is MemSurf — the layer.** `research-agent`, `trading-bot`, and `coding-agent` are
+> **NOT** part of what I built or what I'm submitting. They are **my own example agents** — sample
+> client agents I set up purely as **input/test data** so you can *watch* MemSurf work on something
+> real. Think of them as the *waves*; **MemSurf is the surfboard** — the only thing being judged.
+>
+> Swap them for **your** agents (any namespace on MemWal/Walrus) and MemSurf behaves identically. The
+> example agents are interchangeable demo material; **MemSurf is the deliverable.**
+
+> **Honest scope.** MemSurf's **own** agents are **Curator** and **Router** — **memory-driven**
+> agents that *perceive* (recall + embeddings), *decide* (semantic scoring, gap checks), and *act*
+> (remember / route / anchor) over Walrus memory, with no human in the loop. They are **not** LLM
+> chatbots. (`coding-agent` / `research-agent` / `trading-bot`, by contrast, are the **example client
+> agents** described in the box above — the *input*, not the product.)
 
 ---
 
