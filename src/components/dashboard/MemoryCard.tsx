@@ -190,6 +190,14 @@ export function MemoryCard({
                 <Lock className="w-3 h-3" /> Seal-encrypted
               </span>
               <a
+                href={verified.walruscanUrl ?? `https://walruscan.com/testnet/blob/${blobId}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1 text-ocean hover:text-ocean-deep font-medium dark:text-sky-300"
+              >
+                View on Walruscan <ExternalLink className="w-3 h-3" />
+              </a>
+              <a
                 href={verified.aggregatorUrl}
                 target="_blank"
                 rel="noopener noreferrer"
